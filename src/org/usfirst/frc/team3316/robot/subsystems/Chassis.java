@@ -5,6 +5,7 @@ import java.util.concurrent.Semaphore;
 import org.usfirst.frc.team3316.robot.Robot;
 import org.usfirst.frc.team3316.robot.RobotMap;
 import org.usfirst.frc.team3316.robot.commands.EmptyCmd;
+import org.usfirst.frc.team3316.robot.commands.JoystickControl;
 
 import com.ctre.CANTalon;
 
@@ -33,7 +34,7 @@ public class Chassis extends Subsystem {
     }
 
     public void initDefaultCommand() {
-	setDefaultCommand(new EmptyCmd());
+	setDefaultCommand(new JoystickControl());
     }
 
     private void initActuators() {

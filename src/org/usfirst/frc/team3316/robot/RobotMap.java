@@ -8,6 +8,18 @@ package org.usfirst.frc.team3316.robot;
  */
 public class RobotMap {
 
+	/*
+	 * OI
+	 */
+	
+	// Joysticks ports
+	public static final int JOYSTICK_PORT = 2;
+	
+	// Axis
+	public static final int JOYSTICK_LEFT_AXIS = 0;
+	public static final int JOYSTICK_RIGHT_AXIS = 1;
+	
+	
     /*
      * CHASSIS
      */
@@ -60,6 +72,6 @@ public class RobotMap {
 
     // VARIABLES
     public static double pf_total_time = 10; // in seconds
-    public static double pf_step_time = 1; // in seconds
+    public static double pf_step_time = 0.1; // in seconds
 
 }
