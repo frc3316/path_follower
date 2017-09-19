@@ -22,6 +22,7 @@ public class SetSpeedPID extends Command {
 	private int i = 1;
 	
 	private long lastTime;
+	private double endTime;
 
 	public SetSpeedPID(double setpointLeft, double setpointRight, FalconPathPlanner path) {
 	    System.out.println("sepoint: " + setpointLeft);
@@ -63,17 +64,19 @@ public class SetSpeedPID extends Command {
 		pidRightEnabled = true;
 		
 		lastTime = System.currentTimeMillis();
+		endTime = 0;
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-	    long currentTime  = System.currentTimeMillis();
-	    if (currentTime - lastTime >= (long) (RobotMap.pf_step_time * 1000) && i < path.smoothCenterVelocity.length) {
+	    long currentTime = System.currentTimeMillis();
+	    if (currentTime - lastTime >= (long) ((path.smoothCenterVelocity[i-1][0] - endTime) * 1000) && i < path.smoothCenterVelocity.length) {
 		pidLeft.setSetpoint(Utils.convertFootToMeter(path.smoothLeftVelocity[i][1]));
 		pidRight.setSetpoint(Utils.convertFootToMeter(path.smoothRightVelocity[i][1]));
 		
 		i++;
 		lastTime = currentTime;
+		endTime = path.smoothCenterVelocity[i-1][0];
 	    }
 	}
 
