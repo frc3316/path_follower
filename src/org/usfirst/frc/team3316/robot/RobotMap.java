@@ -1,5 +1,7 @@
 package org.usfirst.frc.team3316.robot;
 
+import org.usfirst.frc.team3316.robot.util.gen.Utils;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -16,8 +18,8 @@ public class RobotMap {
 	public static final int JOYSTICK_PORT = 2;
 	
 	// Axis
-	public static final int JOYSTICK_LEFT_AXIS = 0;
-	public static final int JOYSTICK_RIGHT_AXIS = 1;
+	public static final int JOYSTICK_LEFT_AXIS = 1;
+	public static final int JOYSTICK_RIGHT_AXIS = 5;
 	
 	
     /*
@@ -50,15 +52,15 @@ public class RobotMap {
      */
     
     // CHASSIS SPEED PID
-    public static final double CHASSIS_SPEED_PID_LEFT_KP = 100.0 / 1000.0;
+    public static final double CHASSIS_SPEED_PID_LEFT_KP = 50.0 / 1000.0;
     public static final double CHASSIS_SPEED_PID_LEFT_KI = 0.0 / 1000.0;
     public static final double CHASSIS_SPEED_PID_LEFT_KD = 0.0 / 1000.0;
-    public static final double CHASSIS_SPEED_PID_LEFT_KF = 50.0 / 1000.0;
+    public static final double CHASSIS_SPEED_PID_LEFT_KF = 0.0 / 1000.0;
     
-    public static final double CHASSIS_SPEED_PID_RIGHT_KP = 120.0 / 1000.0;
+    public static final double CHASSIS_SPEED_PID_RIGHT_KP = 70.0 / 1000.0;
     public static final double CHASSIS_SPEED_PID_RIGHT_KI = 0.0 / 1000.0;
     public static final double CHASSIS_SPEED_PID_RIGHT_KD = 0.0 / 1000.0;
-    public static final double CHASSIS_SPEED_PID_RIGHT_KF = 50.0 / 1000.0;
+    public static final double CHASSIS_SPEED_PID_RIGHT_KF = 0.0 / 1000.0;
     
     public static final double CHASSIS_SPEED_PID_TOLERANCE = 0.05;
     
@@ -68,10 +70,10 @@ public class RobotMap {
      */
 
     // CONSTANTS
-    public static final double PF_ROBOT_TRACK_WIDTH = 1.5; // in ft.
+    public static final double PF_ROBOT_TRACK_WIDTH = Utils.convertMeterToFoot(0.55); // in meter
 
     // VARIABLES
-    public static double pf_total_time = 10; // in seconds
+    public static double pf_total_time = 7; // in seconds
     public static double pf_step_time = 0.1; // in seconds
 
 }

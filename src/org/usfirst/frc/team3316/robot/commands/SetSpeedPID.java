@@ -2,6 +2,8 @@ package org.usfirst.frc.team3316.robot.commands;
 
 import org.usfirst.frc.team3316.robot.Robot;
 import org.usfirst.frc.team3316.robot.RobotMap;
+import org.usfirst.frc.team3316.robot.util.falcon.FalconPathPlanner;
+import org.usfirst.frc.team3316.robot.util.gen.Utils;
 
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.Command;
@@ -12,16 +14,25 @@ import edu.wpi.first.wpilibj.command.Command;
 public class SetSpeedPID extends Command {
 
 	private PIDController pidLeft, pidRight;
-	boolean pidLeftEnabled = false, pidRightEnabled = false;
-
+	private boolean pidLeftEnabled = false, pidRightEnabled = false;
 	private double setpointLeft, setpointRight;
+	
+	private FalconPathPlanner path;
+	
+	private int i = 1;
+	
+	private long lastTime;
 
-	public SetSpeedPID(double setpointLeft, double setpointRight) {
+	public SetSpeedPID(double setpointLeft, double setpointRight, FalconPathPlanner path) {
+	    System.out.println("sepoint: " + setpointLeft);
+	    
 		requires(Robot.chassis);
 
 		// Setting values
 		this.setpointLeft = setpointLeft;
 		this.setpointRight = setpointRight;
+		
+		this.path = path;
 	}
 
 	// Called just before this Command runs the first time
@@ -34,7 +45,7 @@ public class SetSpeedPID extends Command {
 
 		pidLeft.setAbsoluteTolerance(RobotMap.CHASSIS_SPEED_PID_TOLERANCE);
 		pidLeft.setSetpoint(this.setpointLeft);
-		pidLeft.setInputRange(-1.0, 1.0);
+		pidLeft.setOutputRange(-1.0, 1.0);
 
 		// PID Right
 		pidRight = Robot.chassis.setSpeedPID(false, RobotMap.CHASSIS_SPEED_PID_RIGHT_KP,
@@ -43,31 +54,32 @@ public class SetSpeedPID extends Command {
 
 		pidRight.setAbsoluteTolerance(RobotMap.CHASSIS_SPEED_PID_TOLERANCE);
 		pidRight.setSetpoint(this.setpointRight);
-		pidRight.setInputRange(-1.0, 1.0);
+		pidRight.setOutputRange(-1.0, 1.0);
 
 		pidLeft.enable();
 		pidLeftEnabled = true;
 
 		pidRight.enable();
 		pidRightEnabled = true;
+		
+		lastTime = System.currentTimeMillis();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		if (pidLeftEnabled && pidLeft.onTarget()) {
-			pidLeft.disable();
-			pidLeftEnabled = false;
-		}
-
-		if (pidRightEnabled && pidRight.onTarget()) {
-			pidRight.disable();
-			pidRightEnabled = false;
-		}
+	    long currentTime  = System.currentTimeMillis();
+	    if (currentTime - lastTime >= (long) (RobotMap.pf_step_time * 1000) && i < path.smoothCenterVelocity.length) {
+		pidLeft.setSetpoint(Utils.convertFootToMeter(path.smoothLeftVelocity[i][1]));
+		pidRight.setSetpoint(Utils.convertFootToMeter(path.smoothRightVelocity[i][1]));
+		
+		i++;
+		lastTime = currentTime;
+	    }
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return false;
+		return i >= path.smoothCenterVelocity.length;
 	}
 
 	// Called once after isFinished returns true

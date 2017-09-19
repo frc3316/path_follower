@@ -86,6 +86,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		
+		SmartDashboard.putNumber("LEFT SPEED", this.chassis.getLeftSpeed());
+		SmartDashboard.putNumber("RIGHT SPEED", this.chassis.getRightSpeed());
 	}
 
 	/**
