@@ -1,6 +1,8 @@
 
 package org.usfirst.frc.team3316.robot;
 
+import java.util.Timer;
+
 import org.usfirst.frc.team3316.robot.commands.PathFollowing;
 import org.usfirst.frc.team3316.robot.subsystems.Chassis;
 
@@ -20,82 +22,88 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
 
-	public static Chassis chassis;
-	public static OI oi;
+    public static Timer timer;
 
-	/**
-	 * This function is run when the robot is first started up and should be
-	 * used for any initialization code.
-	 */
-	@Override
-	public void robotInit() {
-		oi = new OI();
-		
-		chassis = new Chassis();
-		
-		SmartDashboard.putData("Path Following", new PathFollowing());
-	}
+    public static Chassis chassis;
+    public static OI oi;
 
-	/**
-	 * This function is called once each time the robot enters Disabled mode.
-	 * You can use it to reset any subsystem information you want to clear when
-	 * the robot is disabled.
-	 */
-	@Override
-	public void disabledInit() {
+    /**
+     * This function is run when the robot is first started up and should be
+     * used for any initialization code.
+     */
+    @Override
+    public void robotInit() {
+	timer = new Timer();
 
-	}
+	oi = new OI();
 
-	@Override
-	public void disabledPeriodic() {
-		Scheduler.getInstance().run();
-	}
+	chassis = new Chassis();
 
-	/**
-	 * This autonomous (along with the chooser code above) shows how to select
-	 * between different autonomous modes using the dashboard. The sendable
-	 * chooser code works with the Java SmartDashboard. If you prefer the
-	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-	 * getString code to get the auto name from the text box below the Gyro
-	 *
-	 * You can add additional auto modes by adding additional commands to the
-	 * chooser code above (like the commented example) or additional comparisons
-	 * to the switch structure below with additional strings & commands.
-	 */
-	@Override
-	public void autonomousInit() {
+	SmartDashboard.putData("Path Following", new PathFollowing());
+    }
 
-	}
+    /**
+     * This function is called once each time the robot enters Disabled mode.
+     * You can use it to reset any subsystem information you want to clear when
+     * the robot is disabled.
+     */
+    @Override
+    public void disabledInit() {
 
-	/**
-	 * This function is called periodically during autonomous
-	 */
-	@Override
-	public void autonomousPeriodic() {
-		Scheduler.getInstance().run();
-	}
+    }
 
-	@Override
-	public void teleopInit() {
+    @Override
+    public void disabledPeriodic() {
+	Scheduler.getInstance().run();
+    }
 
-	}
+    /**
+     * This autonomous (along with the chooser code above) shows how to select
+     * between different autonomous modes using the dashboard. The sendable
+     * chooser code works with the Java SmartDashboard. If you prefer the
+     * LabVIEW Dashboard, remove all of the chooser code and uncomment the
+     * getString code to get the auto name from the text box below the Gyro
+     *
+     * You can add additional auto modes by adding additional commands to the
+     * chooser code above (like the commented example) or additional comparisons
+     * to the switch structure below with additional strings & commands.
+     */
+    @Override
+    public void autonomousInit() {
 
-	/**
-	 * This function is called periodically during operator control
-	 */
-	@Override
-	public void teleopPeriodic() {
-		Scheduler.getInstance().run();
-		
-		SmartDashboard.putNumber("LEFT SPEED", this.chassis.getLeftSpeed());
-		SmartDashboard.putNumber("RIGHT SPEED", this.chassis.getRightSpeed());
-	}
+    }
 
-	/**
-	 * This function is called periodically during test mode
-	 */
-	@Override
-	public void testPeriodic() {
-		LiveWindow.run();
-	}
+    /**
+     * This function is called periodically during autonomous
+     */
+    @Override
+    public void autonomousPeriodic() {
+	Scheduler.getInstance().run();
+    }
+
+    @Override
+    public void teleopInit() {
+
+    }
+
+    /**
+     * This function is called periodically during operator control
+     */
+    @Override
+    public void teleopPeriodic() {
+	Scheduler.getInstance().run();
+
+	SmartDashboard.putNumber("LEFT SPEED", this.chassis.getLeftSpeed());
+	SmartDashboard.putNumber("RIGHT SPEED", this.chassis.getRightSpeed());
+
+	SmartDashboard.putNumber("YAW", Robot.chassis.getYawAngle());
+    }
+
+    /**
+     * This function is called periodically during test mode
+     */
+    @Override
+    public void testPeriodic() {
+	LiveWindow.run();
+    }
 }
