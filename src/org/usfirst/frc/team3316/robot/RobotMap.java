@@ -57,7 +57,7 @@ public class RobotMap {
     public static final double CHASSIS_SPEED_PID_LEFT_KD = 0.0 / 1000.0;
     public static final double CHASSIS_SPEED_PID_LEFT_KF = 0.0 / 1000.0;
     
-    public static final double CHASSIS_SPEED_PID_RIGHT_KP = 55.0 / 1000.0;
+    public static final double CHASSIS_SPEED_PID_RIGHT_KP = 57.0 / 1000.0;
     public static final double CHASSIS_SPEED_PID_RIGHT_KI = 0.0 / 1000.0;
     public static final double CHASSIS_SPEED_PID_RIGHT_KD = 0.0 / 1000.0;
     public static final double CHASSIS_SPEED_PID_RIGHT_KF = 0.0 / 1000.0;
@@ -65,7 +65,7 @@ public class RobotMap {
     public static final double CHASSIS_SPEED_PID_TOLERANCE = 0.05;
     
     // CHASSIS YAW PID
-    public static final double CHASSIS_YAW_PID_KP = 80.0 / 1000.0;
+    public static final double CHASSIS_YAW_PID_KP = 90.0 / 1000.0;
     public static final double CHASSIS_YAW_PID_KI = 0.0 / 1000.0;
     public static final double CHASSIS_YAW_PID_KD = 0.0 / 1000.0;
     public static final double CHASSIS_YAW_PID_KF = 0.0 / 1000.0;
@@ -79,7 +79,7 @@ public class RobotMap {
     public static final double PF_ROBOT_TRACK_WIDTH = Utils.convertMeterToFoot(0.55); // in meter
 
     // VARIABLES
-    public static double pf_total_time = 7; // in seconds
+    public static double pf_total_time = 11; // in seconds
     public static double pf_step_time = 0.1; // in seconds
 
 }

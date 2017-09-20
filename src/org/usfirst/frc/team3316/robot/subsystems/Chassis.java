@@ -60,6 +60,11 @@ public class Chassis extends Subsystem {
 	motor2_left.setInverted(RobotMap.MOTOR_LEFT_INVERTED);
 	motor1_right.setInverted(RobotMap.MOTOR_RIGHT_INVERTED);
 	motor2_right.setInverted(RobotMap.MOTOR_RIGHT_INVERTED);
+	
+	motor1_left.enableBrakeMode(true);
+	motor2_left.enableBrakeMode(true);
+	motor1_right.enableBrakeMode(true);
+	motor2_right.enableBrakeMode(true);
     }
 
     private void initSensors() {

@@ -3,7 +3,8 @@ package org.usfirst.frc.team3316.robot;
 
 import java.util.Timer;
 
-import org.usfirst.frc.team3316.robot.commands.PathFollowing;
+import org.usfirst.frc.team3316.robot.paths.Path1;
+import org.usfirst.frc.team3316.robot.paths.PathsCommandGroup;
 import org.usfirst.frc.team3316.robot.subsystems.Chassis;
 import org.usfirst.frc.team3316.robot.subsystems.None;
 
@@ -43,7 +44,7 @@ public class Robot extends IterativeRobot {
 	chassis = new Chassis();
 	none = new None();
 
-	SmartDashboard.putData("Path Following", new PathFollowing());
+	SmartDashboard.putData("Paths together", new PathsCommandGroup());
     }
 
     /**

@@ -1,10 +1,11 @@
-package org.usfirst.frc.team3316.robot.commands;
+package org.usfirst.frc.team3316.robot.paths;
 
 import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 
 import org.usfirst.frc.team3316.robot.Robot;
 import org.usfirst.frc.team3316.robot.RobotMap;
+import org.usfirst.frc.team3316.robot.commands.SetPathPIDController;
 import org.usfirst.frc.team3316.robot.util.falcon.FalconPathPlanner;
 import org.usfirst.frc.team3316.robot.util.falcon.PathPoints;
 import org.usfirst.frc.team3316.robot.util.gen.Utils;
@@ -17,14 +18,14 @@ import org.usfirst.frc.team3316.robot.util.falcon.*;
 /**
  *
  */
-public class PathFollowing extends Command {
+public class Path2 extends Command {
 
     FalconPathPlanner path;
     Command cmd = null;
     
     int i = 0;
 
-    public PathFollowing() {
+    public Path2() {
 	requires(Robot.none);
 	
 	PathPoints waypoints = new PathPoints(); // Object using to store all
@@ -33,8 +34,13 @@ public class PathFollowing extends Command {
 	/*
 	 * The place where you can change the path (point values in meters)
 	 */
-	waypoints.addPathPoint(1.0, 1.0);
+	
 	waypoints.addPathPoint(1.0, 2.2);
+	waypoints.addPathPoint(0.0, 2.2);
+	
+	/*
+	 * The end of that place
+	 */
 
 	path = new FalconPathPlanner(waypoints.getPathPoints());
 	path.calculate(RobotMap.pf_total_time, RobotMap.pf_step_time, RobotMap.PF_ROBOT_TRACK_WIDTH);
