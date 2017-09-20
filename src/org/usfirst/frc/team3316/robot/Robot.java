@@ -5,6 +5,7 @@ import java.util.Timer;
 
 import org.usfirst.frc.team3316.robot.commands.PathFollowing;
 import org.usfirst.frc.team3316.robot.subsystems.Chassis;
+import org.usfirst.frc.team3316.robot.subsystems.None;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -25,6 +26,8 @@ public class Robot extends IterativeRobot {
     public static Timer timer;
 
     public static Chassis chassis;
+    public static None none;
+    
     public static OI oi;
 
     /**
@@ -38,6 +41,7 @@ public class Robot extends IterativeRobot {
 	oi = new OI();
 
 	chassis = new Chassis();
+	none = new None();
 
 	SmartDashboard.putData("Path Following", new PathFollowing());
     }

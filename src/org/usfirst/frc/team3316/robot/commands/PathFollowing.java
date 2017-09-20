@@ -3,11 +3,13 @@ package org.usfirst.frc.team3316.robot.commands;
 import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 
+import org.usfirst.frc.team3316.robot.Robot;
 import org.usfirst.frc.team3316.robot.RobotMap;
 import org.usfirst.frc.team3316.robot.util.falcon.FalconPathPlanner;
 import org.usfirst.frc.team3316.robot.util.falcon.PathPoints;
 import org.usfirst.frc.team3316.robot.util.gen.Utils;
 
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 import org.usfirst.frc.team3316.robot.util.falcon.*;
@@ -15,9 +17,16 @@ import org.usfirst.frc.team3316.robot.util.falcon.*;
 /**
  *
  */
-public class PathFollowing extends CommandGroup {
+public class PathFollowing extends Command {
+
+    FalconPathPlanner path;
+    Command cmd = null;
+    
+    int i = 0;
 
     public PathFollowing() {
+	requires(Robot.none);
+	
 	PathPoints waypoints = new PathPoints(); // Object using to store all
 						 // the points
 
@@ -27,13 +36,36 @@ public class PathFollowing extends CommandGroup {
 	waypoints.addPathPoint(1.0, 1.0);
 	waypoints.addPathPoint(1.0, 2.2);
 
-	FalconPathPlanner path = new FalconPathPlanner(waypoints.getPathPoints());
+	path = new FalconPathPlanner(waypoints.getPathPoints());
 	path.calculate(RobotMap.pf_total_time, RobotMap.pf_step_time, RobotMap.PF_ROBOT_TRACK_WIDTH);
 
 	// printLinePlot("Path", "X (feet)", "Y (feet)", path.smoothPath);
+    }
 
-	addSequential(new SetSpeedPID(Utils.convertFootToMeter(path.smoothLeftVelocity[0][1]),
+    protected void initialize() {
+	cmd = (new SetPathPIDController(Utils.convertFootToMeter(path.smoothLeftVelocity[0][1]),
 		Utils.convertFootToMeter(path.smoothRightVelocity[0][1]), path.heading[0][1], path));
+	
+	cmd.start();
+	
+	i = 0;
+    }
+    
+    protected void execute() {
+	i++; // Using to assure command is not interrupted before cmd starts
+    }
+    
+    protected boolean isFinished() {
+	return (!cmd.isRunning() && cmd != null && i > 1);
+    }
+    
+    protected void end() {
+	cmd.cancel();
+	cmd = null;
+    }
+    
+    protected void interrupted() {
+	end();
     }
 
     private void printLinePlot(String title, String xTitle, String yTitle, double[][] data) {

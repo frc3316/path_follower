@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class SetSpeedPID extends Command {
+public class SetPathPIDController extends Command {
 
     private PIDController pidLeft, pidRight, pidYaw;
     private double setpointLeft, setpointRight, setpointYaw;
@@ -22,7 +22,7 @@ public class SetSpeedPID extends Command {
 
     private long lastTime;
 
-    public SetSpeedPID(double setpointLeft, double setpointRight, double setpointYaw, FalconPathPlanner path) {
+    public SetPathPIDController(double setpointLeft, double setpointRight, double setpointYaw, FalconPathPlanner path) {
 //	System.out.println("sepoint: " + setpointLeft);
 
 	requires(Robot.chassis);
@@ -95,6 +95,8 @@ public class SetSpeedPID extends Command {
 	pidLeft.disable();
 
 	pidRight.disable();
+	
+	pidYaw.disable();
 
 	Robot.chassis.setMotors(0.0, 0.0);
     }
