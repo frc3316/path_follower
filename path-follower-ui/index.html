@@ -317,7 +317,7 @@
 				var fieldSize = { width: $(objectId).parent().width(), height: $(objectId).parent().height()}; 
 					
 				var left = e.clientX - (window.innerWidth - fieldSize.width) / 2;
-				var top = e.clientY - $(objectId).parent().offset().top - $(document).scrollTop();
+				var top = e.clientY != 0 ? (e.clientY - $("#header").height() + $("#screen").scrollTop()) : parseInt($(objectId).css("top"), 10);;
 				
 				var line1, line2;
 				line2 = $("#ln" + $(e.target).attr("wp"));
