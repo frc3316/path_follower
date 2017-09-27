@@ -375,8 +375,10 @@
 					preview.src = reader.result;
 					clearField();
 					
-					imgWHRatio = $(preview).width() / $(preview).height();
-					fieldDim = {width:fieldDim.width, height:fieldDim.width / imgWHRatio};
+					preview.onload = function () {
+						imgWHRatio = $(preview).width() / $(preview).height();
+						fieldDim = {width:fieldDim.width, height:fieldDim.width / imgWHRatio};
+					}
 				}
 
       			if (file) {
