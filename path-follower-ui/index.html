@@ -271,8 +271,11 @@
 		</style>
 		<script>
 			var wp_num = 0;
+			
 			var fieldDim = {width:200, height:100};
-			var imgWHRatio;
+			var vertFlipped = false, horiFlipped = false;
+			
+			var imgWHRatio = 2;
 		
 			$(function () {
 				setInterval(function () {
@@ -308,7 +311,7 @@
 					else {
 						return false;
 					}
-				});
+				});	
 			});
 			
 			function waypointDrag(e) {
@@ -387,8 +390,6 @@
            			preview.src = "";
        			}
   			}
-  			
-  			var vertFlipped = false, horiFlipped = false;
   			
   			function flipHori() {
   				if ($("#field_img").attr("src").match("img/nofield_image.png") == null) {
@@ -648,14 +649,175 @@
 							waypointStr += str;
 						}
 					}
-		
-					var blob = new Blob([window.str1 + waypointStr + window.str2], {type:"text/plain;charset=utf-8"});
-			
+					
+					var sizeStr = fieldDim.width + "x" + fieldDim.height + "*";
 					var pathName = $("#path_input").val().trim() == "" ? "Path" : $("#path_input").val().trim();
+					var flippingStr = (horiFlipped ? "1" : "0") + "x" + (vertFlipped ? "1" : "0") + "*";
+					
+					var imgName = saveFieldImageToCookies();
+					
+					if (imgName == false) {
+						return false;
+					}
+		
+					var blob = new Blob([window.str1 + pathName + "*" + sizeStr + imgName + "*" + flippingStr + waypointStr + window.str2], {type:"text/plain;charset=utf-8"});
 				
 					saveAs(blob, pathName + ".java");
 				}
   			}
+  			
+  			function importClick() {
+  				var fine = importPath(URL.createObjectURL(document.getElementById("import_input").files[0]));
+  				if (!fine) {
+  					clearField();
+  					$("#field_img").attr("src", "img/nofield_image.png");
+  					
+  					alert("An error occurred - try to import again");
+  				}
+  			}
+  			
+  			function importPath(file) {
+  				var rawFile = new XMLHttpRequest();
+    			rawFile.open("GET", file, false);
+    			
+    			var toReturn = null;
+    			
+				rawFile.onreadystatechange = function ()
+				{
+					try {
+						if(rawFile.readyState === 4)
+						{
+							if(rawFile.status === 200 || rawFile.status == 0)
+							{
+								var codeText = rawFile.responseText;
+								var codeArr = codeText.split(window.waypointStart);
+							
+								clearField();
+							
+								var settings = codeText.split(window.settingsStr)[1];
+
+								if (settings != null) {
+								
+									var name = settings.split("*")[1].trim();
+									var sizes = settings.split("*")[2];
+									var imgCookieName = settings.split("*")[3].trim();
+									var flipHori = settings.split("*")[4].split("x")[0].trim();
+									var flipVert = settings.split("*")[4].split("x")[1].trim();
+									
+									var img = window.localStorage.getItem(imgCookieName);
+									
+									if (img == null) {
+										toReturn = false;
+										return false;
+									}
+									
+									alert(settings.split("*")[4]);
+								
+									$("#path_input").val(name);
+									$("#field_img").attr("src", window.dataBase64Str + img);
+									
+									imgWHRatio = $("#field_img").width() / $("#field_img").height();
+									
+									if (sizes != null) {
+										var width = sizes.split("x")[0].trim();
+										var height = sizes.split("x")[1].trim();
+							
+										if ($.isNumeric(width) && $.isNumeric(height) && imgWHRatio == width / height) {
+											$("#set_width").val(width);
+											$("#set_height").val(height);
+								
+											fieldDim.width = width;
+											fieldDim.height = height;
+										}
+										else {
+											toReturn = false;
+											return false;
+										}
+									}
+									else {
+										toReturn = false;
+										return false;
+									}
+										if (flipHori == "1") {$("#hori_btn").click();}
+										if (flipVert == "1") {$("#vert_btn").click();}
+								}
+								else {
+									toReturn = false;
+									return false;
+								}
+							
+								for (var i = 1; i < codeArr.length; i++) {
+									var values = codeArr[i].split(");");
+									var x = values[0].split(",")[0].trim();
+									var y = values[0].split(",")[1].trim();
+								
+									if ($.isNumeric(x) && $.isNumeric(y)) {
+										addWaypoint();
+									
+										$(".table_cell").last().children("div:nth-child(1)").children("input").val(x);
+										$(".table_cell").last().children("div:nth-child(2)").children("input").val(y);
+									
+										$(".table_cell").last().children("div:nth-child(1)").children("input").change();
+										$(".table_cell").last().children("div:nth-child(2)").children("input").change();
+									
+										var comment = values[1].split("//")[1];
+										if (comment != null) {
+											comment = comment.trim().split("/*")[0].trim();
+											if (comment != null) {
+												$(".table_cell").last().children("div:nth-child(3)").children("input").val(comment);
+											}
+										}	
+									}
+								}
+							
+								toReturn = true;
+							} else {
+								toReturn = false;
+								return false;
+							}
+						} else {
+							toReturn = false;
+							return false;
+						}
+					}
+					catch(err) {
+						toReturn = false;
+						return false;
+					}
+				}
+				rawFile.send(null);
+				
+				while (toReturn == null) {}
+				return toReturn;
+  			}
+  			
+  			function getBase64Image(img) {
+				var canvas = document.createElement("canvas");
+				canvas.width = img.naturalWidth;
+				canvas.height = img.naturalHeight;
+
+				var ctx = canvas.getContext("2d");
+				ctx.drawImage(img, 0, 0);
+
+				var dataURL = canvas.toDataURL("image/png");
+
+				return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+			}
+			
+			function saveFieldImageToCookies() {
+				try {
+					var imgURL = getBase64Image(document.getElementById("field_img"));
+					var timestamp = new Date().getTime();
+				
+					window.localStorage.setItem(timestamp.toString(), imgURL);
+				
+					return timestamp.toString();
+				}
+				catch (err) {
+					alert("An error occurred - try to enable local storage on your browser");
+					return false;
+				}
+			}
 		</script>
 	</head>
 	<body>
@@ -671,8 +833,10 @@
 					<img id="hori_btn" title="Flip Horizonally" onclick="flipHori()" class="header_btn" src="img/hori_icon.png"/>
 					<img id="vert_btn" title="Flip Vertically" onclick="flipVert()" class="header_btn" src="img/vert_icon.png"/>
 					<img id="upload_btn" title="Upload Field Image" onclick="document.getElementById('file_input').click();" class="header_btn" src="img/upload_icon.png"/>
+					<img id="import_btn" title="Import Path" onclick="document.getElementById('import_input').click();" class="header_btn" src="img/import_icon.png"/>
 					
 					<input id="file_input" type="file" style="display:none;" onchange="previewFile()" accept="image/*" />
+					<input id="import_input" type="file" style="display:none;" onchange="importClick();" accept=".java" />
 				</div>
 			</div>
 			

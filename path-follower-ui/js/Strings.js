@@ -33,10 +33,15 @@ public class Path1 extends Command {
 
 		/*
 		 * The place where you can change the path (point values in meters)
-		 */`;
+		 */
+		 
+		 // SETTINGS FOR PATH IMPORTING - DO NOT REMOVE: *`;
 
 var str2 = 
 	`\n
+		/*
+		 * END OF WAYPOINT SECTION
+		 */
 		path = new FalconPathPlanner(waypoints.getPathPoints());
 		path.calculate(RobotMap.pf_total_time, RobotMap.pf_step_time, RobotMap.PF_ROBOT_TRACK_WIDTH);
     }
@@ -69,3 +74,9 @@ var str2 =
 }`;
 
 var funStr = `\n		waypoints.addPathPoint(`;
+
+var waypointStart = `waypoints.addPathPoint(`;
+
+var settingsStr = `// SETTINGS FOR PATH IMPORTING - DO NOT REMOVE:`;
+
+var dataBase64Str = "data:image/png;base64,";
