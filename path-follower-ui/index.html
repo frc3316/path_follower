@@ -720,12 +720,13 @@
 										var width = sizes.split("x")[0].trim();
 										var height = sizes.split("x")[1].trim();
 							
-										if ($.isNumeric(width) && $.isNumeric(height) && imgWHRatio == width / height) {
+										if ($.isNumeric(width) && $.isNumeric(height)) {
 											$("#set_width").val(width);
 											$("#set_height").val(height);
 								
 											fieldDim.width = width;
 											fieldDim.height = height;
+											
 										}
 										else {
 											toReturn = false;

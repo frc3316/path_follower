@@ -79,7 +79,7 @@ public class RobotMap {
     public static final double PF_ROBOT_TRACK_WIDTH = Utils.convertMeterToFoot(0.55); // in meter
 
     // VARIABLES
-    public static double pf_total_time = 11; // in seconds
+    public static double pf_total_time = 5; // in seconds
     public static double pf_step_time = 0.1; // in seconds
 
 }

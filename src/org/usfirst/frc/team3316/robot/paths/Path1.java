@@ -34,12 +34,10 @@ public class Path1 extends Command {
 	/*
 	 * The place where you can change the path (point values in meters)
 	 */
-	waypoints.addPathPoint(1.0, 1.0);
-	waypoints.addPathPoint(1.0, 2.2);
-	waypoints.addPathPoint(0.0, 2.2);
-	waypoints.addPathPoint(0.0, 3.2);
-	waypoints.addPathPoint(1.0, 3.2);
-	waypoints.addPathPoint(1.0, 1.0);
+	waypoints.addPathPoint(2.0,2.0);
+	waypoints.addPathPoint(2.0, 3.5);
+	waypoints.addPathPoint(0.0, 3.5);
+
 
 	path = new FalconPathPlanner(waypoints.getPathPoints());
 	path.calculate(RobotMap.pf_total_time, RobotMap.pf_step_time, RobotMap.PF_ROBOT_TRACK_WIDTH);
